@@ -1,0 +1,10 @@
+directory to directory rule:
+
+struct monode {
+	int nodetyppe;
+	int rule_id;
+	union path {
+
+	};
+	struct monode *next;
+}
