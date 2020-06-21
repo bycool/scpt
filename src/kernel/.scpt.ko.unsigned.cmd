@@ -1,0 +1,1 @@
+cmd_/home/ten/go-engineer/scpt/src/kernel/scpt.ko.unsigned := ld -r -m elf_x86_64 -T /usr/src/kernels/2.6.32-696.el6.x86_64/scripts/module-common.lds --build-id -o /home/ten/go-engineer/scpt/src/kernel/scpt.ko.unsigned /home/ten/go-engineer/scpt/src/kernel/scpt.o /home/ten/go-engineer/scpt/src/kernel/scpt.mod.o 
