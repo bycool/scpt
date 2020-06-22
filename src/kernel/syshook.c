@@ -5,24 +5,40 @@
 #include <linux/kernel.h>
 #include "kernel.h"
 
-#define HOOKSYS(function) \
-do{ \
-	old_##function = (sys_##function##_t)sys_call_table[__NR_##function]; \
-	sys_call_table[__NR_##function] = new_##function; \
-}while(0);
+sys_creat_t     old_create      = NULL;
+sys_open_t      old_open        = NULL;
+sys_openat_t    old_openat      = NULL;
+sys_write_t     old_write       = NULL;
+sys_writev_t    old_writev      = NULL;
+sys_pwritev_t   old_pwritev     = NULL;
+sys_pwrite64_t  old_pwrite64    = NULL;
+sys_mkdir_t     old_mkdir       = NULL;
+sys_unlink_t    old_unlink      = NULL;
+sys_unlinkat_t  old_unlinkat    = NULL;
+sys_link_t      old_link        = NULL;
+sys_linkat_t    old_linkat      = NULL;
+sys_symlink_t   old_symlink     = NULL;
+sys_symlinkat_t old_symlinkat   = NULL;
+sys_rename_t    old_rename      = NULL;
+sys_renameat_t  old_renameat    = NULL;
+sys_truncate_t  old_truncate    = NULL;
+sys_ftruncate_t old_ftruncate   = NULL;
+sys_rmdir_t     old_rmdir       = NULL;
+sys_chown_t     old_chown       = NULL;
+sys_lchown_t    old_lchown      = NULL;
+sys_fchown_t    old_fchown      = NULL;
+sys_fchownat_t  old_fchownat    = NULL;
+sys_chmod_t     old_chmod       = NULL;
+sys_fchmod_t    old_fchmod      = NULL;
+sys_fchmodat_t  old_fchmodat    = NULL;
+sys_close_t     old_close       = NULL;
 
-#define UNHOOKSYS(function)	\
-do{ \
-	if(old_##function != NULL) \
-		sys_call_table[__NR_##function] = old_##function; \
-}while(0);
+
+#define HOOKSYS(function)   do{ old_##function = (sys_##function##_t)sys_call_table[__NR_##function];	sys_call_table[__NR_##function] = new_##function; }while(0);
+#define UNHOOKSYS(function) do{ if(old_##function != NULL) sys_call_table[__NR_##function] = old_##function; }while(0);
 
 static void **sys_call_table=NULL;
 static unsigned int org_cr0 = 0;
-
-sys_write_t old_write = NULL;
-sys_mkdir_t old_mkdir = NULL;
-sys_rmdir_t old_rmdir = NULL;
 
 struct _idtr {
     unsigned short limit;
@@ -89,7 +105,7 @@ static void *getsystable(void){
 
     memcpy(sc_asm, (char*)syscall_long, 150);
 
-    retval = (unsigned long)memmem(sc_asm, 150, "\xff\x14\xc5", 3);
+    retval = (unsigned long)memmem(sc_asm, 150, "\xff\x14\xc5", 3);  //find 'callq'
     if ( retval != 0 ){
         retval = (unsigned long)(*(unsigned long*)(retval+3));
     }else{
@@ -103,7 +119,7 @@ static void *getsystable(void){
 }
 
 int  syshook_init(void){
-	printk("sshook init\n");
+	printk("syshook init\n");
 
 	sys_call_table = (void**)getsystable();
 	if(sys_call_table == NULL)

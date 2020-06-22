@@ -1,1 +1,0 @@
-cmd_/home/ten/go-engineer/scpt/src/kernel/scpt.o := ld -m elf_x86_64   -r -o /home/ten/go-engineer/scpt/src/kernel/scpt.o /home/ten/go-engineer/scpt/src/kernel/syshook.o /home/ten/go-engineer/scpt/src/kernel/newsys.o /home/ten/go-engineer/scpt/src/kernel/kernel.o /home/ten/go-engineer/scpt/src/kernel/filter.o ; scripts/mod/modpost /home/ten/go-engineer/scpt/src/kernel/scpt.o

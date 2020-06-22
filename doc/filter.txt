@@ -1,7 +1,7 @@
 directory to directory rule:
 
-struct monode {
-	int nodetyppe;
+struct filter {
+	int nodetyppe; //root_path,
 	int rule_id;
 	union path {
 
