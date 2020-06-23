@@ -1,6 +1,5 @@
 obj-m	:= scpt.o
 scpt-objs	:=	syshook.o \
-				newsys.o \
 				kernel.o
 #				filter.o
 			
