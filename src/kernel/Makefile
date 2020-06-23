@@ -1,7 +1,7 @@
 obj-m	:= scpt.o
 scpt-objs	:=	syshook.o \
-				kernel.o
-#				filter.o
+				kernel.o \
+				filter.o
 			
 
 KDIR	:= /lib/modules/$(shell uname -r)/build
